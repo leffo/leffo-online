@@ -1,0 +1,8 @@
+.idea/
+vendor/
+telegam-vacancy-initsource-14-10-2020.tar.gz
+leffo.online.error.log*
+public_html/vendor/
+public_html/.htaccess
+public_html/index.php.old
+public_html/phpinfo.php

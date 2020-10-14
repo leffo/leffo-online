@@ -1,0 +1,13 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Telegram\\": "src/"
+        }
+    },
+    "require": {
+        "ext-simplexml": "*",
+        "ext-pdo": "*",
+        "ext-redis": "*",
+        "irazasyed/telegram-bot-sdk": "^3.3"
+    }
+}

@@ -1,0 +1,15 @@
+{
+"name":"illuminate-example/eloquent",
+"description":"Implementation of Database Queries with illuminate and Eloquent",
+"type":"project",
+"require": {
+    "illuminate/database":"8.x",
+    "ext-json": "*"
+},
+    "autoload":
+        {"psr-4":
+            {
+                "AYakovlev\\": "src/"
+            }
+        }
+}
