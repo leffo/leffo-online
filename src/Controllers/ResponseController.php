@@ -8,7 +8,7 @@ use AYakovlev\Core\Request;
 use AYakovlev\Core\View;
 use AYakovlev\Models\Vacancy;
 
-class Response extends AbstractController
+class ResponseController extends AbstractController
 {
     private const ID = 3;
     public function index(): void
@@ -19,7 +19,7 @@ class Response extends AbstractController
     public function view()
     {
         $data = Vacancy::findOrFail(Request::$params[self::ID]);
-        View::render("vacancy", $data);
+        View::render("response", $data);
         //var_dump($data);
 
         //View::render("vacancies", $data);
