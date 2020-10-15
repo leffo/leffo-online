@@ -1,11 +1,15 @@
 <?php
 
+use AYakovlev\Core\Database;
 use AYakovlev\Models\Vacancy;
 use Telegram\Bot\Api;
 use Telegram\Bot\Keyboard\Keyboard;
+
 //use Telegram\Core\Db;
 
-include('../../vendor/autoload.php');                     //Подключаем библиотеку
+include('../../../vendor/autoload.php');
+require "../../../config/config.php";       //Подключаем bd
+$dbb = new Database();
 
 $telegram = new Api('1386811624:AAEjyqPFSm9lzKDbjqqV43a7vJjFkMeJQsY'); //Устанавливаем токен, полученный у BotFather
 $result = $telegram->getWebhookUpdate();           //Передаем в переменную $result полную информацию о сообщении пользователя
@@ -13,10 +17,16 @@ $result = $telegram->getWebhookUpdate();           //Передаем в пер�
 $text = $result["message"]["text"];                 //Текст сообщения
 $chat_id = $result["message"]["chat"]["id"];        //Уникальный идентификатор пользователя
 $name = $result["message"]["from"]["username"];     //Юзернейм пользователя
-$keyboard = [["PHP"], ["C++"], ["Java"], ["DevOps"], ["Test"]];  //Клавиатура
-$chatId = $result->getMessage()->getChat()->getId();
-$poll_answer = $result['poll_answer']['option_ids'[0]];
+
+$keyboard = [["PHP", "C++", "JavaScript"], ["DevOps", "GO", "MT"], ["QAE", "Test"]];  //Клавиатура
+
+$poll_answer = $result['poll_answer']['option_ids'];
 //$db = Db::getInstance();
+
+if ($poll_answer[0]) {
+    $pollAnswer = 'Опрос закончен! Ваш ответ: ' . $poll_answer[0];
+    $telegram->sendMessage(['chat_id' => $chat_id, 'text' => json_encode($pollAnswer)]);
+}
 
 if($text) {
     if ($text == "/start") {
@@ -24,6 +34,8 @@ if($text) {
         //$reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
         $reply_markup = new Keyboard(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
         $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup ]);
+
+
 
     } elseif ($text == "/help") {
         $reply = "Выберите необходимую категорию вакансий.";
@@ -34,13 +46,23 @@ if($text) {
 
         foreach ($vacancyPhp as $item) {
             $msg = view($item);
-            //$msg = json_encode($msg);
+            $ref = "https://leffo.online/response/view/" . $item->id;
             $telegram->sendMessage([
                 'chat_id' => $chat_id,
-                'text' => $msg,
+                'text' => $msg . "\n\n" . "[Откликнуться]($ref)",
                 'parse_mode' => 'Markdown',
             ]);
+
+/*
+            $telegram->sendMessage([
+                'chat_id' => $chat_id,
+                'text' => "[Откликнуться]($ref)\n\n",
+                'parse_mode' => 'Markdown',
+            ]);
+*/
         }
+
+
 
     } elseif ($text == "C++") {
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => 'Вы выбрали "C++"! Посмотрите вакансии:']);
@@ -56,9 +78,9 @@ if($text) {
             ]);
         }
 
-    } elseif ($text == "Java") {
-        $telegram->sendMessage(['chat_id' => $chat_id, 'text' => 'Вы выбрали "Java"! Посмотрите вакансии:']);
-        $vacancy = Vacancy::where('category', '=', 'Java')->get();
+    } elseif ($text == "JavaScript") {
+        $telegram->sendMessage(['chat_id' => $chat_id, 'text' => 'Вы выбрали "JavaScript"! Посмотрите вакансии:']);
+        $vacancy = Vacancy::where('category', '=', 'JavaScript')->get();
 
         foreach ($vacancy as $item) {
             $msg = view($item);
@@ -82,6 +104,31 @@ if($text) {
                 'parse_mode' => 'Markdown',
             ]);
         }
+    } elseif ($text == "GO") {
+        $vacancyPhp = Vacancy::where('category', '=', 'GO')->get();
+
+        foreach ($vacancyPhp as $item) {
+            $msg = view($item);
+            //$msg = json_encode($msg);
+            $telegram->sendMessage([
+                'chat_id' => $chat_id,
+                'text' => $msg,
+                'parse_mode' => 'Markdown',
+            ]);
+        }
+    } elseif ($text == "MT") {
+        $vacancyPhp = Vacancy::where('category', '=', 'MT')->get();
+
+        foreach ($vacancyPhp as $item) {
+            $msg = view($item);
+            //$msg = json_encode($msg);
+            $telegram->sendMessage([
+                'chat_id' => $chat_id,
+                'text' => $msg,
+                'parse_mode' => 'Markdown',
+            ]);
+        }
+
     } elseif ($text == "Test") {
         $codeForPoll =  '*Что выведет код?*
 ```php 
@@ -113,10 +160,6 @@ echo $b;
             'open_period'               => 15,
         ];
         $msg = $telegram->sendPoll($params);
-
-        $pollAnswer = 'Опрос закончен! Ваш ответ: ' . $poll_answer;
-        $telegram->sendMessage(['chat_id' => $chat_id, 'text' => json_encode($pollAnswer)]);
-
     }
 } else {
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => "Отправьте текстовое сообщение."]);
@@ -124,20 +167,20 @@ echo $b;
 
 
 
-function view(array $item): string
+function view(object $item): string
 {
     $outString = '';
-    $outString = "*ID вакансии:* " . $item["id"] . "\n";
-    $outString .= "*Наименование вакансии:* " . $item["title"] . "\n";
-    $outString .= "*Зарплата:* " . $item["price"] . "\n";
-    $outString .= "*Организация:* " . $item["organization"] . "\n";
-    $outString .= "*Адрес: *" . $item["address"] . "\n";
-    $outString .= "*Телефон:* " . $item["telephone"] . "\n";
-    $outString .= "*Требуемый опыт:* " . $item["experience"] . "\n";
-    $outString .= "*Технологии:* " . $item["technology"] . "\n";
-    $outString .= "*Требуемые навыки:* " . $item["skills"] . "\n";
-    $outString .= "*Описание вакансии:* " . $item["descriptions"] . "\n";
-    $outString .= "*Дата создания вакансии;* " . $item["datecreation"] . "\n";
+    $outString = "*ID вакансии:* " . $item->id . "\n";
+    $outString .= "*Наименование вакансии:* " . $item->title . "\n";
+    $outString .= "*Зарплата:* " . $item->price . "\n";
+    $outString .= "*Организация:* " . $item->organization . "\n";
+    $outString .= "*Адрес: *" . $item->address . "\n";
+    $outString .= "*Телефон:* " . $item->telephone . "\n";
+    $outString .= "*Требуемый опыт:* " . $item->experience . "\n";
+    $outString .= "*Технологии:* " . $item->technology . "\n";
+    $outString .= "*Требуемые навыки:* " . $item->skills . "\n";
+    $outString .= "*Описание вакансии:* " . $item->descriptions . "\n";
+    $outString .= "*Дата создания вакансии;* " . $item->created_at . "\n";
     
     return $outString;
 }

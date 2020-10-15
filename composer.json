@@ -4,6 +4,7 @@
 "type":"project",
 "require": {
     "illuminate/database":"8.x",
+    "irazasyed/telegram-bot-sdk": "^3.3",
     "ext-json": "*"
 },
     "autoload":
