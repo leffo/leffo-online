@@ -27,4 +27,16 @@ class ChatKeyboard
         //$keyboard = [["PHP", "C++", "JavaScript"], ["DevOps", "GO", "MT"], ["QAE", "Test"]];
         return $keyboard;
     }
+
+    public static function inArrayMultiDimensional($needle, array $haystack): bool
+    {
+        foreach($haystack as $value)
+        {
+            if(in_array($needle, $value, true))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
