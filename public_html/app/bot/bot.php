@@ -33,7 +33,7 @@ if($text) {
         $reply = "Выберите необходимую категорию вакансий.";
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply]);
 
-    } elseif (ChatKeyboard::inArrayMultiDimensional($text, $keyboard) && $text != "Test") {
+    } elseif (ChatKeyboard::inArray2d($text, $keyboard) && $text != "Test") {
         CategoryOfVacancies::getListVacancies($text, $telegram, $chat_id);
 
     } elseif ($text == "Test") {

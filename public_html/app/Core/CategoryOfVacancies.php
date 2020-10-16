@@ -9,7 +9,7 @@ use Telegram\Bot\Api;
 
 class CategoryOfVacancies
 {
-    public static function getListVacancies(string $categoryVacancy, Api $telegram, int $chat_id): void
+    public static function getListVacancies(string $categoryVacancy, object $telegram, int $chat_id): void
     {
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => 'Вы выбрали "' . $categoryVacancy . '"! Посмотрите вакансии:']);
         $vacancyPhp = Vacancy::where('category', '=', $categoryVacancy)->get();

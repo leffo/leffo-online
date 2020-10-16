@@ -28,7 +28,7 @@ class ChatKeyboard
         return $keyboard;
     }
 
-    public static function inArrayMultiDimensional($needle, array $haystack): bool
+    public static function inArray2d($needle, array $haystack): bool
     {
         foreach($haystack as $value)
         {
