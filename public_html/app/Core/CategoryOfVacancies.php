@@ -10,12 +10,12 @@ use Telegram\Bot\Api;
 class CategoryOfVacancies
 {
     public static function getListVacancies(
-        string $categoryVacancy,
-        object $telegram,
-        int $chat_id,
-        string $name,
-        string $first_name,
-        string $last_name
+        string  $categoryVacancy,
+        object  $telegram,
+        int     $chat_id,
+        string  $name,
+        string  $first_name,
+        string  $last_name
     ): void
     {
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => 'Вы выбрали "' . $categoryVacancy . '"! Посмотрите вакансии:']);

@@ -18,10 +18,10 @@ $b = $b + 1;
 echo $b;
 ```';
         $telegram->sendMessage([
-            'chat_id' => $chat_id,
-            'text' => $codeForPoll,
-            'disable_notification' => true,
-            'parse_mode' => 'Markdown',
+            'chat_id'               => $chat_id,
+            'text'                  => $codeForPoll,
+            'disable_notification'  => true,
+            'parse_mode'            => 'Markdown',
         ]);
 
         $params = [
