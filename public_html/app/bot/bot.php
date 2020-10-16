@@ -4,14 +4,15 @@ use AYakovlev\Core\Database;
 use AYakovlev\Models\Vacancy;
 use Telegram\Bot\Api;
 use Telegram\Bot\Keyboard\Keyboard;
+use VacTelegram\Core\CategoryOfVacancies;
 
 //use Telegram\Core\Db;
 
-include('../../../vendor/autoload.php');
+require "../../../vendor/autoload.php";
 require "../../../config/config.php";       //Подключаем bd
 $dbb = new Database();
-
 $telegram = new Api('1386811624:AAEjyqPFSm9lzKDbjqqV43a7vJjFkMeJQsY'); //Устанавливаем токен, полученный у BotFather
+
 $result = $telegram->getWebhookUpdate();           //Передаем в переменную $result полную информацию о сообщении пользователя
 
 $text = $result["message"]["text"];                 //Текст сообщения
@@ -21,7 +22,6 @@ $name = $result["message"]["from"]["username"];     //Юзернейм поль�
 $keyboard = [["PHP", "C++", "JavaScript"], ["DevOps", "GO", "MT"], ["QAE", "Test"]];  //Клавиатура
 
 $poll_answer = $result['poll_answer']['option_ids'];
-//$db = Db::getInstance();
 
 if ($poll_answer[0]) {
     $pollAnswer = 'Опрос закончен! Ваш ответ: ' . $poll_answer[0];
@@ -39,7 +39,7 @@ if($text) {
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply]);
 
     } elseif ($text == "PHP") {
-        \Telegram\Core\CategoryOfVacancies::getListVacancies($text, $telegram, $chat_id);        }
+        CategoryOfVacancies::getListVacancies($text, $telegram, $chat_id);
 
     } elseif ($text == "C++") {
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => 'Вы выбрали "C++"! Посмотрите вакансии:']);
@@ -137,9 +137,9 @@ echo $b;
             'open_period'               => 15,
         ];
         $msg = $telegram->sendPoll($params);
-    }
-} else {
+    } else {
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => "Отправьте текстовое сообщение."]);
+    }
 }
 
 
@@ -161,4 +161,3 @@ function view(object $item): string
     
     return $outString;
 }
-

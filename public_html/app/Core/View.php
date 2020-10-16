@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Telegram\Core;
+namespace VacTelegram\Core;
 
 
 class View

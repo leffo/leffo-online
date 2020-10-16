@@ -10,7 +10,8 @@
     "autoload":
         {"psr-4":
             {
-                "AYakovlev\\": "src/"
+                "AYakovlev\\": "src/",
+                "VacTelegram\\": "public_html/app/"
             }
         }
 }
