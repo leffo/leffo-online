@@ -10,18 +10,18 @@ use VacTelegram\Core\Poll;
 //use Telegram\Core\Db;
 
 require "../../../vendor/autoload.php";
-require "../../../config/config.php";       //Подключаем bd
-$dbb = new Database();
+require "../../../config/config.php";
 
-$telegram = new Api((require '../../config/settings.php')['apitoken']); //Устанавливаем токен, полученный у BotFather
+$dbb        = new Database();
+$telegram   = new Api((require '../../config/settings.php')['apitoken']);
+$result     = $telegram->getWebhookUpdate();
 
-$result = $telegram->getWebhookUpdate();           //Передаем в переменную $result полную информацию о сообщении пользователя
-
-$text = $result["message"]["text"];                 //Текст сообщения
-$chat_id = $result["message"]["chat"]["id"];        //Уникальный идентификатор пользователя
-$name = $result["message"]["from"]["username"];     //Юзернейм пользователя
-
-$keyboard = ChatKeyboard::getCategoryKeyboard();
+$text       = $result["message"]["text"];
+$chat_id    = $result["message"]["chat"]["id"];
+$name       = $result["message"]["from"]["username"];
+$first_name = $result["message"]["from"]["first_name"];
+$last_name  = $result["message"]["from"]["last_name"];
+$keyboard   = ChatKeyboard::getCategoryKeyboard();
 
 if($text) {
     if ($text == "/start") {
@@ -34,7 +34,7 @@ if($text) {
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply]);
 
     } elseif (ChatKeyboard::inArray2d($text, $keyboard) && $text != "Test") {
-        CategoryOfVacancies::getListVacancies($text, $telegram, $chat_id);
+        CategoryOfVacancies::getListVacancies($text, $telegram, $chat_id, $name, $first_name, $last_name);
 
     } elseif ($text == "Test") {
         Poll::sendQuizPoll($telegram, $chat_id);

@@ -16,7 +16,8 @@ class User extends Model
         'role',
         'password_hash',
         'auth_token',
-
+        'first_name',
+        'last_name'
     ];
     public $timestamps = true;
 }
