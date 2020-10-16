@@ -10,6 +10,7 @@ use AYakovlev\Exception\InvalidArgumentException;
 use AYakovlev\Exception\Forbidden;
 use AYakovlev\Exception\NotFoundException;
 use AYakovlev\Exception\UnauthorizedException;
+use AYakovlev\Models\Resume;
 use AYakovlev\Models\User;
 
 use AYakovlev\Models\Vacancy;
@@ -176,6 +177,72 @@ class VacancyController extends AbstractController
 
     public function response()
     {
+        if (!empty($_POST)) {
+            try {
+                if (empty($_POST['vacancy_id'])) {
+                    throw new InvalidArgumentException('Не передано название вакансии');
+                }
 
+                if (empty($_POST['firstname'])) {
+                    throw new InvalidArgumentException('Не указано имя');
+                }
+
+                if (empty($_POST['secondname'])) {
+                    throw new InvalidArgumentException('Не указано отчество');
+                }
+
+                if (empty($_POST['lastname'])) {
+                    throw new InvalidArgumentException('Не передана фамилия');
+                }
+
+                if (empty($_POST['birthdate'])) {
+                    throw new InvalidArgumentException('Не передана дата рождения');
+                }
+
+                if (empty($_POST['address_fact'])) {
+                    throw new InvalidArgumentException('Не передан адрес проживания');
+                }
+
+                if (empty($_POST['birthdate'])) {
+                    throw new InvalidArgumentException('Не передана дата рождения');
+                }
+
+                if (empty($_POST['phone'])) {
+                    throw new InvalidArgumentException('Не передан телефон');
+                }
+
+                if (empty($_POST['email'])) {
+                    throw new InvalidArgumentException('Не передан email');
+                }
+
+                if (empty($_POST['family_status'])) {
+                    throw new InvalidArgumentException('Не передано семейное положение');
+                }
+
+                if (empty($_POST['experience'])) {
+                    throw new InvalidArgumentException('Не передан опыт');
+                }
+
+                if (empty($_POST['education'])) {
+                    throw new InvalidArgumentException('Не указано образование');
+                }
+
+                if (empty($_POST['about'])) {
+                    throw new InvalidArgumentException('Не передано описание');
+                }
+
+            } catch (InvalidArgumentException $e) {
+                View::render('addResume', $e);
+                return;
+            }
+            $resume = Resume::create($_POST);
+
+            header('Location: /resume/view/' . $resume->id, true, 302);
+            exit();
+        }
+
+
+        View::render("addResume");
+        //return;
     }
 }
