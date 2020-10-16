@@ -10,7 +10,7 @@ class ChatKeyboard
 {
     public static function getCategoryKeyboard(): array
     {
-        $categoryList = Vacancy::pluck('category');
+        $categoryList = Vacancy::groupBy('category')->pluck('category');
 
         $keyboard = [];
         $numberRow = count($categoryList) / 3;
