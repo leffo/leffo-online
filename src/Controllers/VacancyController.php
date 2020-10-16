@@ -173,4 +173,9 @@ class VacancyController extends AbstractController
         $this->idVacancy = null;
         View::render('delete');
     }
+
+    public function response()
+    {
+
+    }
 }

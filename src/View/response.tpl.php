@@ -3,6 +3,7 @@
  *  @var array $data - массив входящих переменных
  *  @var object $author
  */
+use AYakovlev\Core\Request;
 ?>
 
 <?php include 'header.php'; ?>
@@ -22,6 +23,11 @@
         <b>Описание вакансии:</b> <?= $data->descriptions; ?><br>
     </p>
     <br>
-    <p><a href="/vacancy/response/<?= $data->id; ?>">Отправить отклик на рассмотрение</a></p>
+    <p>
+        Здравствуте,
+        <?= urldecode(Request::$params[5]) . ' ' . urldecode(Request::$params[6]) . '!';
+        ?>
+        <br>
+        <a href="/vacancy/response/<?= $data->id; ?>">Отправить отклик на рассмотрение</a></p>
     <br>
 <?php include 'footer.php'; ?>
