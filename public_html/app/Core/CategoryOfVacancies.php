@@ -5,12 +5,14 @@ namespace Telegram\Core;
 
 
 use AYakovlev\Models\Vacancy;
+use Telegram\Bot\Api;
 
 class CategoryOfVacancies
 {
-    public function getListVacancies(string $categoryVacancy):void
+    public static function getListVacancies(string $categoryVacancy, Api $telegram, int $chat_id): void
     {
-        $vacancyPhp = Vacancy::where('category', '=', 'PHP')->get();
+        $telegram->sendMessage(['chat_id' => $chat_id, 'text' => 'Вы выбрали "C++"! Посмотрите вакансии:']);
+        $vacancyPhp = Vacancy::where('category', '=', $categoryVacancy)->get();
 
         foreach ($vacancyPhp as $item) {
             $msg = view($item);

@@ -31,38 +31,15 @@ if ($poll_answer[0]) {
 if($text) {
     if ($text == "/start") {
         $reply = "Добро пожаловать в бота вакансий!";
-        //$reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
         $reply_markup = new Keyboard(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
         $telegram->sendMessage([ 'chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup ]);
-
-
 
     } elseif ($text == "/help") {
         $reply = "Выберите необходимую категорию вакансий.";
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply]);
 
     } elseif ($text == "PHP") {
-        $vacancyPhp = Vacancy::where('category', '=', 'PHP')->get();
-
-        foreach ($vacancyPhp as $item) {
-            $msg = view($item);
-            $ref = "https://leffo.online/response/view/" . $item->id;
-            $telegram->sendMessage([
-                'chat_id' => $chat_id,
-                'text' => "\n\n" . $msg . "\n\n" . "[Откликнуться]($ref)",
-                'parse_mode' => 'Markdown',
-            ]);
-
-/*
-            $telegram->sendMessage([
-                'chat_id' => $chat_id,
-                'text' => "[Откликнуться]($ref)\n\n",
-                'parse_mode' => 'Markdown',
-            ]);
-*/
-        }
-
-
+        \Telegram\Core\CategoryOfVacancies::getListVacancies($text, $telegram, $chat_id);        }
 
     } elseif ($text == "C++") {
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => 'Вы выбрали "C++"! Посмотрите вакансии:']);
