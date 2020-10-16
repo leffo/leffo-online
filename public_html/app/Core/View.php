@@ -9,8 +9,8 @@ class View
     public static function tlgRender($item): string
     {
         $outString = '';
-        $outString = "*ID вакансии:* " . $item->id . "\n";
-        $outString .= "*Наименование вакансии:* " . $item->title . "\n";
+        $outString .= "*{$item->title}*" . "\n\n";
+        $outString .= "*ID вакансии:* " . $item->id . "\n";
         $outString .= "*Зарплата:* " . $item->price . "\n";
         $outString .= "*Организация:* " . $item->organization . "\n";
         $outString .= "*Адрес: *" . $item->address . "\n";
@@ -19,7 +19,7 @@ class View
         $outString .= "*Технологии:* " . $item->technology . "\n";
         $outString .= "*Требуемые навыки:* " . $item->skills . "\n";
         $outString .= "*Описание вакансии:* " . $item->descriptions . "\n";
-        $outString .= "*Дата создания вакансии;* " . $item->created_at . "\n";
+        $outString .= "*Дата создания вакансии:* " . $item->created_at;
 
         return $outString;
     }
